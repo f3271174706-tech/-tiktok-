@@ -186,6 +186,12 @@ body {
   background: #000;
   overflow: hidden;
 }
+#videoWrap {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(100,140,255,0.12), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(160,120,255,0.08), transparent 50%),
+    #0a0a14;
+}
 video::-webkit-media-controls-panel {
   background: linear-gradient(transparent, rgba(0,0,0,0.4)) !important;
 }
@@ -234,7 +240,7 @@ video::-webkit-media-controls-enclosure {
     <div id="mediaPreview" class="hidden w-full" style="max-width:960px;">
       <div class="rounded-[24px] overflow-hidden bg-black" style="box-shadow:0 24px 64px rgba(0,0,0,0.6); transform:translateZ(0); will-change:transform; -webkit-transform:translateZ(0);">
         <div id="videoWrap" class="aspect-video">
-          <video id="videoPlayer" controls playsinline class="w-full h-full object-contain bg-black"></video>
+          <video id="videoPlayer" controls playsinline class="w-full h-full object-contain"></video>
         </div>
         <div id="photoWrap" class="hidden">
           <img id="photoDisplay" src="" alt="" class="w-full object-contain max-h-80 mx-auto">
