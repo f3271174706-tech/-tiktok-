@@ -7,10 +7,9 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
-/* Ensure interactive elements stay above liquidGL WebGL canvas */
-#inputLayer, #dropletLayer, #resultLayer { position: relative; z-index: 5; }
+/* Ensure interactive elements are clickable */
+#inputLayer, #dropletLayer, #resultLayer { position: relative; z-index: 3; }
 #inputLayer *, #resultLayer * { pointer-events: auto; }
-#magicCard canvas { pointer-events: none !important; z-index: 1 !important; }
 </style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap');
@@ -628,41 +627,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script src="/static/html2canvas.min.js?v=1"></script>
-<script src="/static/liquidGL.js?v=1"></script>
-<script>
-/**
- * liquidGL – glassmorphism for #magicCard
- * -------------------------------------------------------
- * Init order: snapshot body → `on.init` fires → GSAP
- * entrance plays.  Content layers inside the card carry
- * position:relative + z-index:5 so they sit above the lens.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof liquidGL === 'undefined') return;
 
-  const glass = liquidGL({
-    target: '#magicCard',
-    snapshot: 'body',
-    resolution: 1.5,
-    refraction: 0.03,
-    bevelDepth: 0.08,
-    bevelWidth: 0.18,
-    frost: 2,
-    shadow: true,
-    specular: true,
-    reveal: 'fade',
-    tilt: false,
-    on: {
-      init() {
-        console.log('liquidGL ready');
-      },
-    },
-  });
-
-  // Register the card so morphing animations are picked up
-  liquidGL.registerDynamic('#magicCard');
-});
-</script>
 </body>
 </html>
