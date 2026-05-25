@@ -231,7 +231,7 @@ video::-webkit-media-controls-enclosure {
   <div class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 gap-5">
 
     <!-- ═══ Media Preview (outside card, no glass) ═══ -->
-    <div id="mediaPreview" class="hidden w-full" style="max-width:600px;">
+    <div id="mediaPreview" class="hidden w-full" style="max-width:960px;">
       <div class="rounded-[24px] overflow-hidden bg-black" style="box-shadow:0 24px 64px rgba(0,0,0,0.6); transform:translateZ(0); will-change:transform; -webkit-transform:translateZ(0);">
         <div id="videoWrap" class="aspect-video">
           <video id="videoPlayer" controls playsinline class="w-full h-full object-contain bg-black"></video>
@@ -245,7 +245,7 @@ video::-webkit-media-controls-enclosure {
 
     <!-- ═══ MAGIC CARD (controls only) ═══ -->
     <div id="magicCard" class="glass-card relative z-10 flex flex-col items-center"
-         style="width:min(480px,100%); border-radius:36px; padding:36px 28px; will-change:transform,border-radius,width,height,padding;">
+         style="width:min(680px,100%); border-radius:36px; padding:36px 32px; will-change:transform,border-radius,width,height,padding;">
 
       <!-- ── State 1: Input ── -->
       <div id="inputLayer" class="w-full flex flex-col items-center gap-6">
@@ -407,7 +407,7 @@ function animateToResult() {
   gsap.killTweensOf(card);
   gsap.to(dropletLayer, { opacity: 0, scale: 0.85, duration: 0.15, ease: 'power2.in', onComplete: () => dropletLayer.classList.add('hidden') });
   gsap.to(card, {
-    width: Math.min(520, window.innerWidth - 32), minHeight: 380, borderRadius: '36px', padding: '36px 28px',
+    width: Math.min(720, window.innerWidth - 32), minHeight: 420, borderRadius: '36px', padding: '36px 32px',
     duration: 1.05, ease: 'elastic.out(1, 0.35)',
   });
   inputLayer.classList.add('hidden');
@@ -441,7 +441,7 @@ function resetCard() {
 
   // Morph card back to input shape
   gsap.to(card, {
-    width: Math.min(480, window.innerWidth - 32), minHeight: 180, borderRadius: '36px', padding: '36px 28px',
+    width: Math.min(680, window.innerWidth - 32), minHeight: 200, borderRadius: '36px', padding: '36px 32px',
     duration: 0.7, ease: 'power3.out',
   });
 
@@ -522,7 +522,7 @@ async function parseVideo() {
     animateToResult();
   } catch (e) {
     gsap.to(dropletLayer, { opacity: 0, duration: 0.12, onComplete: () => dropletLayer.classList.add('hidden') });
-    gsap.to(card, { width: Math.min(480, window.innerWidth-32), minHeight: 180, borderRadius: '36px', padding: '36px 28px', duration: 0.65, ease: 'elastic.out(1,0.45)' });
+    gsap.to(card, { width: Math.min(680, window.innerWidth-32), minHeight: 200, borderRadius: '36px', padding: '36px 32px', duration: 0.65, ease: 'elastic.out(1,0.45)' });
     inputLayer.classList.remove('hidden');
     gsap.to(inputLayer, { opacity: 1, y: 0, duration: 0.2 });
     document.getElementById('parseBtn').disabled = false;
