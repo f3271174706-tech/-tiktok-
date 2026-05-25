@@ -629,6 +629,7 @@ vp.addEventListener('playing', () => lh.classList.add('hidden'));
 // Auto-fullscreen landscape videos on first click
 const videoWrap = document.getElementById('videoWrap');
 videoWrap.addEventListener('click', function autoFS() {
+  console.log('click on videoWrap', vp.videoWidth, vp.videoHeight, !!document.fullscreenElement);
   if (vp.videoWidth <= vp.videoHeight) return;
   if (document.fullscreenElement) return;
   videoWrap.removeEventListener('click', autoFS);
