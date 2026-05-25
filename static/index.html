@@ -627,11 +627,12 @@ vp.addEventListener('waiting', () => lh.classList.remove('hidden'));
 vp.addEventListener('playing', () => lh.classList.add('hidden'));
 
 // Auto-fullscreen landscape videos on first click
-vp.addEventListener('click', function autoFS() {
+const videoWrap = document.getElementById('videoWrap');
+videoWrap.addEventListener('click', function autoFS() {
   if (vp.videoWidth <= vp.videoHeight) return;
   if (document.fullscreenElement) return;
-  vp.removeEventListener('click', autoFS);
-  try { vp.requestFullscreen().catch(() => {}); } catch {}
+  videoWrap.removeEventListener('click', autoFS);
+  try { videoWrap.requestFullscreen().catch(() => {}); } catch {}
 });
 vp.addEventListener('canplay', () => lh.classList.add('hidden'));
 
