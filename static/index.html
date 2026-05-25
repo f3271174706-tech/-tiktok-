@@ -86,25 +86,17 @@ body {
 }
 
 .glass-card {
-  background: rgba(255,255,255,0.008);
-  backdrop-filter: blur(60px) saturate(200%);
-  -webkit-backdrop-filter: blur(60px) saturate(200%);
-  border: 1px solid rgba(255,255,255,0.08);
-  position: relative;
+  background: rgba(255,255,255,0.001);
+  /* liquidGL handles the glass effect – keep a near-transparent bg so the WebGL canvas shows through */
+  border: 1px solid rgba(255,255,255,0.06);
   box-shadow:
-    0 0 30px rgba(255,255,255,0.01),
-    0 0 80px rgba(100,120,255,0.06),
-    0 0 150px rgba(100,120,255,0.02),
-    0 0 0 0.5px rgba(255,255,255,0.08) inset,
-    0 1px 0 rgba(255,255,255,0.03) inset,
-    0 16px 48px rgba(0,0,0,0.5),
-    0 4px 12px rgba(0,0,0,0.3);
+    0 8px 32px rgba(0,0,0,0.4),
+    0 0 0 0.5px rgba(255,255,255,0.04) inset;
 }
 .glass-card::before {
-  content: ''; position: absolute; inset: -2px; border-radius: inherit;
-  background: linear-gradient(135deg, rgba(120,100,255,0.07), transparent 40%, transparent 60%, rgba(100,150,255,0.04));
+  content: ''; position: absolute; inset: -1px; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(120,100,255,0.04), transparent 40%, transparent 60%, rgba(100,150,255,0.02));
   z-index: -1; pointer-events: none;
-  filter: blur(20px);
 }
 
 /* ─── Input ─── */
@@ -631,26 +623,37 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="/static/html2canvas.min.js"></script>
 <script src="/static/liquidGL.js"></script>
 <script>
+/**
+ * liquidGL – glassmorphism for #magicCard
+ * -------------------------------------------------------
+ * Init order: snapshot body → `on.init` fires → GSAP
+ * entrance plays.  Content layers inside the card carry
+ * position:relative + z-index:5 so they sit above the lens.
+ */
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    liquidGL({
-      target: '#magicCard',
-      refraction: 0.6,
-      bevelDepth: 0.1,
-      bevelWidth: 0.25,
-      frost: 3,
-      shadow: true,
-      specular: true,
-      tilt: true,
-      tiltFactor: 4,
-      reveal: 'fade',
-    });
-    // Disable pointer events on WebGL canvas so clicks go through
-    setTimeout(() => {
-      const canvases = document.querySelectorAll('#magicCard canvas');
-      canvases.forEach(c => { c.style.pointerEvents = 'none'; c.style.zIndex = '0'; });
-    }, 1000);
-  }, 500);
+  if (typeof liquidGL === 'undefined') return;
+
+  const glass = liquidGL({
+    target: '#magicCard',
+    snapshot: 'body',
+    resolution: 1.5,
+    refraction: 0.01,
+    bevelDepth: 0.06,
+    bevelWidth: 0.18,
+    frost: 0,
+    shadow: true,
+    specular: true,
+    reveal: 'fade',
+    tilt: false,
+    on: {
+      init() {
+        console.log('liquidGL ready');
+      },
+    },
+  });
+
+  // Register the card so morphing animations are picked up
+  liquidGL.registerDynamic('#magicCard');
 });
 </script>
 </body>
