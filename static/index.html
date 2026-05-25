@@ -625,6 +625,17 @@ const vp = document.getElementById('videoPlayer');
 const lh = document.getElementById('loadingHint');
 vp.addEventListener('waiting', () => lh.classList.remove('hidden'));
 vp.addEventListener('playing', () => lh.classList.add('hidden'));
+
+// Auto-fullscreen landscape videos on play
+let _isLandscapeVideo = false;
+vp.addEventListener('loadedmetadata', () => {
+  _isLandscapeVideo = vp.videoWidth > vp.videoHeight;
+});
+vp.addEventListener('play', () => {
+  if (!_isLandscapeVideo) return;
+  if (document.fullscreenElement) return;
+  try { vp.requestFullscreen().catch(() => {}); } catch {}
+});
 vp.addEventListener('canplay', () => lh.classList.add('hidden'));
 
 // ─── Page load animation ───
