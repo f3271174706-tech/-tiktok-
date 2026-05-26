@@ -345,11 +345,23 @@ def download_video(
         info = extract_video_info(url)  # uses cache
         if info["type"] == "photo":
             if media_type == "video" and info.get("music_url"):
-                # Slides with music → make video
+                # Slides with music → make slideshow video
                 out_path = _make_slides_video(info)
                 filename = os.path.basename(out_path)
                 return out_path, filename
-            filepath, filename = _download_single_photo(info, image_index)
+            elif media_type == "mp3" and info.get("music_url"):
+                # Download music directly
+                r = httpx.get(info["music_url"], headers={"User-Agent": MOBILE_UA}, follow_redirects=True, timeout=60)
+                safe_title = re.sub(r'[\\/*?:"<>|]', "", info["title"])[:50]
+                filename = f"{safe_title}.mp3" if safe_title else f"{uuid.uuid4().hex[:12]}.mp3"
+                filepath = str(DOWNLOADS_DIR / filename)
+                with open(filepath, "wb") as f:
+                    f.write(r.content)
+                _schedule_cleanup(filepath)
+                return filepath, filename
+            else:
+                # image type → download single photo
+                filepath, filename = _download_single_photo(info, image_index)
         else:
             filepath, filename = _download_douyin_video(info, quality)
     else:

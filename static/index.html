@@ -545,7 +545,7 @@ function buildResult(data) {
     vWrap.classList.add('hidden'); pWrap.classList.remove('hidden'); pDots.classList.remove('hidden');
     document.getElementById('landscapeBtn').classList.add('hidden');
     qRow.classList.add('hidden'); tRow.classList.add('hidden'); currentVideoUrl = '';
-    if (data.music_url) { tRow.classList.remove('hidden'); setType('video'); }
+    if (data.music_url) { tRow.classList.remove('hidden'); currentType = 'image'; }
     let ds = '';
     currentImages.forEach((_, i) => { ds += `<button onclick="showPhoto(${i})" class="w-2 h-2 rounded-full ${i===0?'bg-white/60':'bg-white/15'}"></button>`; });
     pDots.innerHTML = ds; showPhoto(0);
@@ -575,7 +575,7 @@ async function downloadCurrentPhoto() {
   document.getElementById('downloadText').textContent = 'Downloading...';
   document.getElementById('downloadSpinner').classList.remove('hidden');
   try {
-    const res = await fetch('/api/download', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: currentUrl, type: 'video', image_index: currentPhotoIdx }) });
+    const res = await fetch('/api/download', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: currentUrl, type: currentType, image_index: currentPhotoIdx }) });
     if (!res.ok) { const d = await res.json(); throw new Error(d.detail); }
     const blob = await res.blob();
     let fn = 'image.webp';
