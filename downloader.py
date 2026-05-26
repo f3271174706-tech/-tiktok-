@@ -502,3 +502,20 @@ def _schedule_cleanup(filepath: str):
 
     t = threading.Thread(target=_cleanup, daemon=True)
     t.start()
+
+
+def cleanup_old_files(max_age_seconds: int = 1800):
+    """Delete download files older than max_age_seconds (default 30 min). Called at startup."""
+    _ensure_downloads_dir()
+    now = time.time()
+    deleted = 0
+    for f in DOWNLOADS_DIR.iterdir():
+        if f.is_file():
+            try:
+                if now - f.stat().st_mtime > max_age_seconds:
+                    f.unlink()
+                    deleted += 1
+            except OSError:
+                pass
+    if deleted:
+        print(f"[cleanup] Removed {deleted} old file(s) from downloads/")

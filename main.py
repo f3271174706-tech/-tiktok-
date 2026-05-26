@@ -8,9 +8,13 @@ from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from downloader import MOBILE_UA, apply_quality, download_video_for_stream, extract_video_info, download_video
+from downloader import MOBILE_UA, apply_quality, cleanup_old_files, download_video_for_stream, extract_video_info, download_video
 
 app = FastAPI(title="抖音/TikTok 无水印下载器")
+
+@app.on_event("startup")
+async def startup_cleanup():
+    cleanup_old_files()
 
 app.add_middleware(
     CORSMiddleware,
