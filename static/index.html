@@ -305,7 +305,7 @@ video::-webkit-media-controls-enclosure {
         <div id="photoDots" class="hidden flex items-center justify-center gap-2"></div>
 
         <!-- Save current image button -->
-        <button id="saveImageBtn" onclick="downloadCurrentPhoto()" class="hidden btn-glass w-full rounded-[16px] py-2.5 text-xs flex items-center justify-center gap-1.5">
+        <button id="saveImageBtn" onclick="saveCurrentImage()" class="hidden btn-glass w-full rounded-[16px] py-2.5 text-xs flex items-center justify-center gap-1.5">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Save Image
         </button>
@@ -487,7 +487,10 @@ function setType(t) {
 
 function updateLabel() {
   document.getElementById('downloadText').textContent =
-    currentContentType === 'photo' ? 'Download Image'
+    currentContentType === 'photo'
+      ? currentType === 'mp3' ? 'Download MP3'
+      : currentType === 'video' ? 'Download Slideshow'
+      : 'Download'
     : currentType === 'mp3' ? 'Download MP3'
     : 'Download';
 }
@@ -552,7 +555,7 @@ function buildResult(data) {
     document.getElementById('landscapeBtn').classList.add('hidden');
     document.getElementById('saveImageBtn').classList.remove('hidden');
     qRow.classList.add('hidden'); tRow.classList.add('hidden'); currentVideoUrl = '';
-    if (data.music_url) { tRow.classList.remove('hidden'); currentType = 'image'; }
+    if (data.music_url) { tRow.classList.remove('hidden'); setType('video'); }
     let ds = '';
     currentImages.forEach((_, i) => { ds += `<button onclick="showPhoto(${i})" class="w-2 h-2 rounded-full ${i===0?'bg-white/60':'bg-white/15'}"></button>`; });
     pDots.innerHTML = ds; showPhoto(0);
@@ -577,6 +580,24 @@ function buildResult(data) {
 }
 
 // ═══ Download ═══
+async function saveCurrentImage() {
+  if (!currentUrl) return;
+  const btn = document.getElementById('saveImageBtn');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const res = await fetch('/api/download', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: currentUrl, type: 'image', image_index: currentPhotoIdx }) });
+    if (!res.ok) { const d = await res.json(); throw new Error(d.detail); }
+    const blob = await res.blob();
+    let fn = 'image.webp';
+    const disp = res.headers.get('Content-Disposition') || '';
+    const rfc = disp.match(/filename\*=(?:UTF-8|utf-8)''(.+?)(?:;|$)/i);
+    if (rfc) fn = decodeURIComponent(rfc[1]); else { const m = disp.match(/filename="?(.+?)"?$/); if (m) fn = m[1]; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fn;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+  } catch (e) { showToast(e.message || 'Failed', 'error'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+}
 async function downloadCurrentPhoto() {
   if (!currentUrl) return;
   const btn = document.getElementById('downloadBtn'); btn.disabled = true;
