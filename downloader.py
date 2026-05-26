@@ -307,7 +307,7 @@ def _make_slides_video(info: dict) -> str:
         for v in vid_paths:
             f.write(f"file '{v}'\n")
 
-    safe_name = re.sub(r'[\\/*?:"<>|]', "", info["title"])[:50] or uuid.uuid4().hex[:12]
+    safe_name = re.sub(r'[\n\r\t\\/*?:"<>|#]', '', info["title"])[:50] or uuid.uuid4().hex[:12]
     out_path = str(DOWNLOADS_DIR / f"{safe_name}.mp4")
     cmd = ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_file]
     if music_path:
@@ -352,7 +352,7 @@ def download_video(
             elif media_type == "mp3" and info.get("music_url"):
                 # Download music directly
                 r = httpx.get(info["music_url"], headers={"User-Agent": MOBILE_UA}, follow_redirects=True, timeout=60)
-                safe_title = re.sub(r'[\\/*?:"<>|]', "", info["title"])[:50]
+                safe_title = re.sub(r'[\n\r\t\\/*?:"<>|#]', '', info["title"])[:50]
                 filename = f"{safe_title}.mp3" if safe_title else f"{uuid.uuid4().hex[:12]}.mp3"
                 filepath = str(DOWNLOADS_DIR / filename)
                 with open(filepath, "wb") as f:
@@ -387,7 +387,7 @@ def _download_douyin_video(info: dict, quality: str = "1080p") -> tuple[str, str
     headers = {"User-Agent": MOBILE_UA, "Referer": "https://www.iesdouyin.com/"}
     r = httpx.get(video_url, headers=headers, follow_redirects=True, timeout=120)
 
-    safe_title = re.sub(r'[\\/*?:"<>|]', "", info["title"])[:50]
+    safe_title = re.sub(r'[\n\r\t\\/*?:"<>|#]', '', info["title"])[:50]
     filename = f"{safe_title}.mp4" if safe_title else f"{uuid.uuid4().hex[:12]}.mp4"
     filepath = str(DOWNLOADS_DIR / filename)
 
@@ -431,7 +431,7 @@ def _download_single_photo(info: dict, index: int = 0) -> tuple[str, str]:
         else:
             ext = ".webp"
 
-    safe_title = re.sub(r'[\\/*?:"<>|]', "", info["title"])[:50]
+    safe_title = re.sub(r'[\n\r\t\\/*?:"<>|#]', '', info["title"])[:50]
     filename = f"{safe_title}_{idx+1}{ext}" if safe_title else f"{uuid.uuid4().hex[:12]}{ext}"
     filepath = str(DOWNLOADS_DIR / filename)
 
