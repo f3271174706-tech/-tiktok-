@@ -243,8 +243,8 @@ video::-webkit-media-controls-enclosure {
           <img id="photoDisplay" src="" alt="" class="w-full object-contain max-h-80 mx-auto">
         </div>
         <div id="loadingHint" class="hidden absolute inset-0 flex items-center justify-center bg-black/80 text-xs text-white/30">Loading...</div>
-        <button id="fullscreenBtn" onclick="document.getElementById('videoWrap').requestFullscreen().catch(()=>{})" title="全屏" class="absolute bottom-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center transition-colors border border-white/20" style="backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+        <button id="fullscreenBtn" onclick="var w=document.getElementById('videoWrap');w.requestFullscreen().then(function(){try{screen.orientation.lock('landscape')}catch{}}).catch(function(){})" title="横屏播放" class="absolute bottom-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center transition-colors border border-white/20" style="backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 3l-4 4M21 3h-4m4 0v4M3 21l4-4M3 21h4m-4 0v-4"/><path d="M16 3H8a5 5 0 00-5 5v8a5 5 0 005 5h8a5 5 0 005-5v-4" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
