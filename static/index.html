@@ -231,7 +231,7 @@ video::-webkit-media-controls-enclosure {
   </nav>
 
   <!-- ─── Main content ─── -->
-  <div id="mainContent" class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 gap-5">
+  <div class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 gap-5">
 
     <!-- ═══ Media Preview (outside card, no glass) ═══ -->
     <div id="mediaPreview" class="hidden w-full" style="max-width:960px;">
@@ -243,7 +243,7 @@ video::-webkit-media-controls-enclosure {
           <img id="photoDisplay" src="" alt="" class="w-full object-contain max-h-80 mx-auto">
         </div>
         <div id="loadingHint" class="hidden absolute inset-0 flex items-center justify-center bg-black/80 text-xs text-white/30">Loading...</div>
-        <button id="landscapeBtn" onclick="var main=document.getElementById('mainContent');var mp=document.getElementById('mediaPreview');var vw=document.getElementById('videoWrap');this.classList.toggle('active');if(this.classList.contains('active')){mp.style.maxWidth='480px';vw.style.aspectRatio='9/16';setTimeout(function(){main.style.transform='rotate(-90deg)';main.style.width='100vh';main.style.transformOrigin='center center'},50)}else{mp.style.maxWidth='960px';vw.style.aspectRatio='16/9';main.style.transform='';main.style.width=''}" title="横屏模式" class="absolute bottom-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center transition-colors border border-white/20" style="backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+        <button id="landscapeBtn" onclick="var outer=this.parentElement;var mp=document.getElementById('mediaPreview');var vw=document.getElementById('videoWrap');this.classList.toggle('active');if(this.classList.contains('active')){mp.style.maxWidth='480px';vw.style.aspectRatio='9/16';setTimeout(function(){outer.style.transform='rotate(-90deg)';outer.style.transformOrigin='center center'},50)}else{mp.style.maxWidth='960px';vw.style.aspectRatio='16/9';outer.style.transform=''}" title="横屏模式" class="absolute bottom-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center transition-colors border border-white/20" style="backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M17 10v4"/></svg>
         </button>
       </div>
