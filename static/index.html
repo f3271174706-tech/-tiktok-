@@ -626,13 +626,6 @@ const lh = document.getElementById('loadingHint');
 vp.addEventListener('waiting', () => lh.classList.remove('hidden'));
 vp.addEventListener('playing', () => lh.classList.add('hidden'));
 
-// Auto-fullscreen landscape videos on play
-vp.addEventListener('play', function autoFS() {
-  if (vp.videoWidth <= vp.videoHeight) return;
-  if (document.fullscreenElement) return;
-  vp.removeEventListener('play', autoFS);
-  try { vp.requestFullscreen().catch(() => {}); } catch {}
-});
 vp.addEventListener('canplay', () => lh.classList.add('hidden'));
 
 // ─── Page load animation ───
